@@ -34,9 +34,9 @@ do
 done
 
 # Make sure docker isn't running alrieady with specified container name
-docker stop excelsior || echo "Making sure docker is not already running"
+docker stop modalai || echo "Making sure docker is not already running"
 # Make sure specified docker container doesn't already exist because it will be created
-docker rm excelsior || echo "Making sure docker does not already exist"
+docker rm modalai || echo "Making sure docker does not already exist"
 
 # Copy permissions over so root can access current directory
 sudo chmod -R a+rwX .
@@ -51,7 +51,7 @@ sudo chmod -R a+rwX .
 #       -v              binf mount a volume/directory
 #       -w              working directory string
 docker run --rm \
-           --name excelsior \
+           --name modalai \
            --privileged \
            -it \
            -e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0 \
