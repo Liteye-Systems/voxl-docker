@@ -16,6 +16,7 @@ This project can be used to create the cross-compiler build environment for the 
     * sudo apt-get install android-tools-adb android-tools-fastboot
 6. Download archived docker ARM image from ModalAI Developer portal (login required):
     * https://developer.modalai.com/
+    * [VOXL Emulator Docker Image (1.0.0)](https://developer.modalai.com/asset/eula-download/3)
 7. Copy tar archive into the 'docker-image' directory
     * cp [Download Dir]/modalai-1-0-0.tar ./docker-image/modalai-1-0-0.tar
 8. Run configuration script to load docker image from archive:
