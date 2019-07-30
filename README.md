@@ -1,17 +1,25 @@
-# apps-proc-cross-compiler-docker
+# voxl-docker
 
-This project can be used to download and install the build environment for the VOXL applications processor. We provide a Docker image which contains the root file system that runs on VOXL itself. Through QEMU emulation and Docker, the ARM binaries in the VOXL rootFS can run on a desktop computer speeding up compilation time. Anything that can be compiled onboard VOXL should be able to be compiled in this docker image too.
+This project provides setup instructions for two docker images which provide build environments for the VOXL's ARM applications processor and Hexagon SDSP. It also provides the "voxl-docker" script for easily launching these docker images. These two docker images are prerequisites for building the majority of open-source projects on https://gitlab.com/voxl-public
 
-Note that wihle this image does contain ROS, it is fairly clean and you will likely have to install other build dependencies inside this docker image after launching it depending on which project you are compiling.
+#### voxl-emulator
+
+We provide a Docker image in .tar format which contains the root file system that runs on VOXL itself. Through QEMU emulation and Docker, the ARM binaries in the VOXL rootFS can run on a desktop computer aiding development and speeding up compilation time. Anything that can be compiled onboard VOXL should be able to be compiled in voxl-emulator.
+
+Note that this image is fairly clean and you will likely have to install build dependencies inside this docker image after launching it depending on which project you are compiling.
+
+#### voxl-hexagon
+
+The voxl-hexagon docker image is based on the x86_64 Ubuntu Bionic docker image but additionally contains the Qualcomm Hexagon SDK 3.1 and an ARM cross compiler. For legal reasons these components must be downloaded from their respective sources by the user before building the docker image. However, we provide instructions and an install script here in this project.
 
 
-## Prerequisite: Install dependencies
 
-```bash
-sudo apt-get install qemu-user-static android-tools-adb android-tools-fastboot
-```
+## Installation Instructions:
 
-## Prerequisite: Install Docker CE
+The following instructions are for installing docker and the two aforementioned Docker Images in an Ubuntu Desktop Environment. These instructions are tested on Ubuntu 18.04 Bionic but should work on other Ubuntu version supported by Docker.
+
+
+#### Prerequisite: Install Docker CE
 
 1) Official instructions are here:
 
@@ -34,7 +42,7 @@ sudo apt-get update
 sudo apt install -y docker-ce docker-ce-cli containerd.io
 ```
 
-2) Add current user to docker group to allow usage of docker commands without root privaledges. You will need to restart your OS after running this command for the group permissions to be applied.
+2) Add current user to docker group to allow usage of docker commands without root privileges. You will need to restart your OS after running this command for the group permissions to be applied.
 
 ```bash
 sudo usermod -a -G docker $USER
@@ -42,34 +50,57 @@ sudo usermod -a -G docker $USER
 
 
 
-## Setup the ModalAI ARM Docker Image
+#### Install the voxl-emulator Docker Image
 ------------------------------
 
 4) Download archived docker image from ModalAI Developer portal (login required):
     * https://developer.modalai.com/
     * [VOXL Emulator Docker Image (1.0.0)](https://developer.modalai.com/asset/eula-download/3)
 
-5) Move archive into this directory alongside install.sh and this README.md
-    * cp [Download Dir]/modalai-1-0-0.tar ./docker-image/modalai-1-0-0.tar
+5) Move archive into this directory alongside install-emulator-docker.sh and this README.md
 
-6) Run configuration script to load docker image from archive and install the run-voxl-docker.sh script to /usr/local/bin so the docker image can be started from within other project directories.
+6) Run configuration script to load docker image from archive and install the voxl-docker.sh script to /usr/local/bin so the docker image can be started from within other project directories.
 
 ```bash
-./install.sh
+./install-emulator-docker.sh
 ```
 
-## Run docker:
------------
-6) Now run it!
+6) Test that the image was properly installed.
 
 ```bash
-run-voxl-docker
+james@ModalAI-PC-4:~/git/voxl-docker$ voxl-docker -l | grep "voxl"
+voxl-emulator       latest              0e15518b8f95        17 minutes ago      1.26GB
 ```
 
-7) Default behavior and optional arguments:
+#### (OPTIONAL) Install the voxl-hexagon Docker Image
+
+If you wish to build programs for the Hexagon SDSP, you will need the Hexagon SDK from Qualcomm. To make this easier we provide the voxl-hexagon docker image which uses Hexagon SDK V3.1
+
+7) Initialize repository submodules.
+```
+git submodule update --init
+```
+
+8) Download and place the following files into cross_toolchain/downloads
+
+Hexagon SDK 3.1 install file: qualcomm_hexagon_sdk_3_1_eval.bin
+
+* https://developer.qualcomm.com/download/hexagon/hexagon-sdk-v3-1-linux.bin
+
+Linaro ARM compiler binaries: gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf.tar.xz
+
+* https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabihf
+
+9) Run the install-hexagon-docker.sh script. This will also install voxl-docker.sh to usr/bin/ as did install-emulator-docker.sh in case the user wants the hexagon docker only.
 
 ```bash
-$ run-voxl-docker.sh -h
+./install-hexagon-docker.sh
+```
+
+## Use of voxl-docker script
+
+```bash
+$ voxl-docker -h
 
 Usage: run-voxl-docker.sh [ARGUMENTS]
 
@@ -84,4 +115,11 @@ ARGUMENTS:
   -d <name>: The name of the directory to mount at /home/root inside the docker
   -i <name>: The name of the docker image to run
   -p       : Run the docker in privaledged mode (root user inside docker)
+```
+
+```bash
+$ voxl-docker -l
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+voxl-hexagon        latest              637d89d3a530        19 minutes ago      5.28GB
+voxl-emulator       latest              0e15518b8f95        1  months ago       1.26GB
 ```

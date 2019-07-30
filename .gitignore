@@ -1,2 +1,4 @@
-*.tar
 .bash_history
+*.tar
+.sudo_as_admin_successful
+.bashrc
