@@ -46,6 +46,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 ```bash
 sudo usermod -a -G docker $USER
+sudo reboot
 ```
 
 
@@ -54,7 +55,6 @@ sudo usermod -a -G docker $USER
 ------------------------------
 
 4) Download archived docker image from ModalAI Developer portal (login required):
-    * https://developer.modalai.com/
     * [VOXL Emulator Docker Image (1.0.0)](https://developer.modalai.com/asset/eula-download/3)
 
 5) Move archive into this directory alongside install-emulator-docker.sh and this README.md
@@ -65,21 +65,17 @@ sudo usermod -a -G docker $USER
 ./install-emulator-docker.sh
 ```
 
-6) Test that the image was properly installed.
+7) Test that the image was properly installed.
 
 ```bash
-james@ModalAI-PC-4:~/git/voxl-docker$ voxl-docker -l | grep "voxl"
-voxl-emulator       latest              0e15518b8f95        17 minutes ago      1.26GB
+~/git/voxl-docker$ voxl-docker -l | grep "voxl"
+voxl-emulator       latest              0e15518b8f95        11 months ago       1.26GB
 ```
 
 #### (OPTIONAL) Install the voxl-hexagon Docker Image
 
 If you wish to build programs for the Hexagon SDSP, you will need the Hexagon SDK from Qualcomm. To make this easier we provide the voxl-hexagon docker image which uses Hexagon SDK V3.1
 
-7) Initialize repository submodules.
-```
-git submodule update --init
-```
 
 8) Download and place the following files into cross_toolchain/downloads
 
@@ -96,6 +92,16 @@ Linaro ARM compiler binaries: gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf.
 ```bash
 ./install-hexagon-docker.sh
 ```
+
+10) Confirm the install worked
+
+```bash
+~/git/voxl-docker$ voxl-docker -l | grep "voxl"
+voxl-hexagon        latest              6b7bb00b90d0        2 minutes ago       5.21GB
+voxl-emulator       latest              0e15518b8f95        11 months ago       1.26GB
+```
+
+
 
 ## Use of voxl-docker script
 
