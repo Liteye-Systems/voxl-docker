@@ -7,7 +7,7 @@ Usage: $(basename $0) [ARGUMENTS]
 By default this runs the voxl-emulator image for compiling ARM apps-proc code
 for VOXL. It can also run the voxl-hexagon docker image for cross-compiling
 hexagon SDSP programs. Technically this can also launch any other installed
-docker image with the -i argument but is only tested with the voxl-emulator
+docker image with the -i argument but is only intended for the voxl-emulator
 and voxl-hexagon images.
 
 By default this mounts the current working directory as the home directory
@@ -15,9 +15,11 @@ inside the docker for easy compilation of whichever project you are currently
 working in. The directory that gets mounted inside the docker can be manually
 specified with the -d argument.
 
-For both the voxl-emulator and voxl-hexagon images, the default the user and
-group ID inside the docker image matches that of the user that runs this script
-to avoid conflicting permissions.
+The voxl-hexagon image starts with the username "user" with UID and GID 1000
+which should match the first user on your desktop to avoid permissions issues.
+
+The voxl-emulator image start, by default, with the same username, UID, and GID
+inside the docker as the user that launched it.
 
 Since the voxl-emulator image is designed to emulate the userspace environment
 that runs onboard the VOXL itself, you may wish to run as the root user inside

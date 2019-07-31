@@ -108,19 +108,37 @@ voxl-emulator       latest              0e15518b8f95        11 months ago       
 ```bash
 $ voxl-docker -h
 
-Usage: run-voxl-docker.sh [ARGUMENTS]
+Usage: voxl-docker [ARGUMENTS]
 
-By default this runs the ModalAI VOXL docker image. Any other installed docker image can also be specified with the -i argument.
+By default this runs the voxl-emulator image for compiling ARM apps-proc code
+for VOXL. It can also run the voxl-hexagon docker image for cross-compiling
+hexagon SDSP programs. Technically this can also launch any other installed
+docker image with the -i argument but is only intended for the voxl-emulator
+and voxl-hexagon images.
 
-By default this mounts the current working directory as the home directory inside the docker for easy compilation of whichever project you are currently working in. The directory that gets mounted inside the docker can be manually specified with the -d argument.
+By default this mounts the current working directory as the home directory
+inside the docker for easy compilation of whichever project you are currently
+working in. The directory that gets mounted inside the docker can be manually
+specified with the -d argument.
 
-By default the user and group inside the docker image matches that of the user that runs this script to avoid conflicting permissions. If you wish to run as root inside the docker then use the -p option to run in privaledged mode. This more closely mimics the on-target environment as the VOXL image runs as root by default.
+The voxl-hexagon image starts with the username "user" with UID and GID 1000
+which should match the first user on your desktop to avoid permissions issues.
+
+The voxl-emulator image start, by default, with the same username, UID, and GID
+inside the docker as the user that launched it.
+
+Since the voxl-emulator image is designed to emulate the userspace environment
+that runs onboard the VOXL itself, you may wish to run as the root user inside
+the voxl-emulator docker image to test certain behaviors as the root user.
+This more closely mimics the on-target environment as the VOXL image runs as
+root by default. Enter this mode with the -p option.
 
 ARGUMENTS:
   -h:      : Print this help message
-  -d <name>: The name of the directory to mount at /home/root inside the docker
-  -i <name>: The name of the docker image to run
-  -p       : Run the docker in privaledged mode (root user inside docker)
+  -d <name>: The name of the directory to mount as ~/ inside the docker
+  -i <name>: Docker image to run, usually voxl-emulator or voxl-hexagon
+  -p       : for voxl-emulator image ONLY, runs as root user inside docker
+  -l       : list installed docker images
 ```
 
 ```bash
