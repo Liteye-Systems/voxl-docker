@@ -85,6 +85,11 @@ RUN cd /opt/cross_toolchain && ./installsdk.sh --APQ8096 --arm-gcc /opt/
 
 # Add DSP Abstraction Layer (DSPAL) files to environment
 ADD dspal /opt/dspal
+ENV DSPAL_DIR=/opt/dspal
+
+# Add cmake_hexagon macros and toolchain files
+ADD cmake_hexagon /opt/cmake_hexagon
+ENV CMAKE_HEXAGON_DIR=/opt/cmake_hexagon
 
 # Copy DSPAL include directory to hexagon SDK target include directory
 RUN rsync -a /opt/dspal/include/ /opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Tools/8.0.08/Tools/target/hexagon/include/
@@ -93,7 +98,8 @@ RUN rsync -a /opt/dspal/include/ /opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Too
 RUN ln -s /opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11 /opt/Qualcomm/Hexagon_SDK/3.1/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf_linux
 
 # Put device rule to configure USB for Hexagon SDK debug tool mini-dm
-RUN mkdir -p /etc/udev/rules.d && cp /opt/cross_toolchain/70-android.rules /etc/udev/rules.d/70-android.rules
+RUN mkdir -p /etc/udev/rules.d 
+ADD files/70-android.rules /etc/udev/rules.d/70-android.rules
 
 # erase old install files to shrink docker size
 RUN rm -rf /opt/cross_toolchain/downloads/*
@@ -102,5 +108,5 @@ RUN rm -rf /opt/cross_toolchain/downloads/*
 ENV HEXAGON_SDK_ROOT=/opt/Qualcomm/Hexagon_SDK/3.1
 ENV HEXAGON_TOOLS_ROOT=/opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Tools/8.0.08/Tools
 ENV ARM_CROSS_GCC_ROOT=/opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11
-ENV HEXAGON_ARM_SYSROOT=/opt/Qualcomm/qrlinux_sysroot
+ENV HEXAGON_ARM_SYSROOT=/opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11/libc/
 ENV MINI_DM=${HEXAGON_SDK_ROOT}/tools/debug/mini-dm/Linux_Debug/mini-dm
