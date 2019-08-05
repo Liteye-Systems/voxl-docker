@@ -35,9 +35,9 @@
 # Installer script for Hexagon SDK 3.1 based environment
 #
 
-GCC_2014=gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf
+GCC_2014=gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi
 GCC_2014_SHORT=gcc-4.9-2014.11
-GCC_2014_URL=https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabihf
+GCC_2014_URL=https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabi
 
 INSTALLER30_BIN=qualcomm_hexagon_sdk_lnx_3_0_eval.bin
 INSTALLER31_BIN=qualcomm_hexagon_sdk_3_1_eval.bin
@@ -154,7 +154,7 @@ install_qrlsdk() {
 
 	# Unpack sysroot
 	if [ ! -f ${HEXAGON_ARM_SYSROOT}/QRLSDKMD5SUM ] || \
-		([ -f ${HEXAGON_ARM_SYSROOT}/QRLSDKMD5SUM ] && 
+		([ -f ${HEXAGON_ARM_SYSROOT}/QRLSDKMD5SUM ] &&
 		 [ ! ${QRLSDKMD5SUM} = `cat ${HEXAGON_ARM_SYSROOT}/QRLSDKMD5SUM` ]); then
 		remove_qrlsdk
 
@@ -162,7 +162,7 @@ install_qrlsdk() {
 
 		# Clean out old SDK installations
 		if [ ! -f downloads/qrlSDK/sysroots/eagle8074/QRLSDKMD5SUM ] || \
-			([ -f downloads/qrlSDK/sysroots/eagle8074/QRLSDKMD5SUM ] && 
+			([ -f downloads/qrlSDK/sysroots/eagle8074/QRLSDKMD5SUM ] &&
 			[ ! ${QRLSDKMD5SUM} = `cat downloads/qrlSDK/sysroots/eagle8074/QRLSDKMD5SUM` ]); then
 			rm -rf downloads/qrlSDK
 			echo "Extracting qrlSDK tar file"
@@ -362,7 +362,7 @@ elf_strip () {
 		if [ "`echo \"$info\" | head -c 3`" == "ELF" ]; then
 			if [ ! "`echo \"$info\" | tail -c 10`" == " stripped" ]; then
 				echo "$info" | grep -q DSP6 && ${HEXAGON_TOOLS_ROOT}/bin/hexagon-strip --strip-unneeded $f
-				echo "$info" | grep -q ARM && ${ARM_CROSS_GCC_ROOT}/bin/arm-linux-gnueabihf-strip --strip-unneeded $f
+				echo "$info" | grep -q ARM && ${ARM_CROSS_GCC_ROOT}/bin/arm-linux-gnueabi-strip --strip-unneeded $f
 				echo "$info" | grep -q x86-64 && strip --strip-unneeded $f
 			fi
 		fi
@@ -380,8 +380,8 @@ archive_strip () {
 
 			# hexagon-strip doesn't handle archives
 			#echo "$info" | grep DSP6 && ${HEXAGON_TOOLS_ROOT}/bin/hexagon-strip --strip-unneeded $f
-			
-			echo "$info" | grep -q ARM && ${ARM_CROSS_GCC_ROOT}/bin/arm-linux-gnueabihf-strip --strip-unneeded $f
+
+			echo "$info" | grep -q ARM && ${ARM_CROSS_GCC_ROOT}/bin/arm-linux-gnueabi-strip --strip-unneeded $f
 			echo "$info" | grep -q X86-64 && strip --strip-unneeded $f
 		fi
 	done

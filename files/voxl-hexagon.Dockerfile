@@ -95,10 +95,10 @@ ENV CMAKE_HEXAGON_DIR=/opt/cmake_hexagon
 RUN rsync -a /opt/dspal/include/ /opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Tools/8.0.08/Tools/target/hexagon/include/
 
 # Create symbolic link to cross compiler for user
-RUN ln -s /opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11 /opt/Qualcomm/Hexagon_SDK/3.1/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf_linux
+RUN ln -s /opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11 /opt/Qualcomm/Hexagon_SDK/3.1/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi_linux
 
 # Put device rule to configure USB for Hexagon SDK debug tool mini-dm
-RUN mkdir -p /etc/udev/rules.d 
+RUN mkdir -p /etc/udev/rules.d
 ADD files/70-android.rules /etc/udev/rules.d/70-android.rules
 
 # erase old install files to shrink docker size

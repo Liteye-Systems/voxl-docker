@@ -2,7 +2,7 @@
 
 RUN_SCRIPT=voxl-docker
 HEXAGON_BIN=qualcomm_hexagon_sdk_3_1_eval.bin
-GCC_BIN=gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf.tar.xz
+GCC_BIN=gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi.tar.xz
 
 # check files have been downloaded
 if [ ! -f cross_toolchain/downloads/$HEXAGON_BIN ]; then
@@ -14,7 +14,7 @@ fi
 if [ ! -f cross_toolchain/downloads/$GCC_BIN ]; then
 	echo "GCC cross compiler not found"
 	echo "please download to cross_toolchain/downloads/"
-	echo "https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabihf"
+	echo "https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabi"
 	exit 1
 fi
 
