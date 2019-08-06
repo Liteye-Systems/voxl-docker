@@ -83,9 +83,9 @@ Hexagon SDK 3.1 install file: qualcomm_hexagon_sdk_3_1_eval.bin
 
 * https://developer.qualcomm.com/download/hexagon/hexagon-sdk-v3-1-linux.bin
 
-Linaro ARM compiler binaries: gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf.tar.xz
+Linaro ARM compiler binaries: gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi.tar.xz
 
-* https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabihf
+* https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabi
 
 9) Run the install-hexagon-docker.sh script. This will also install voxl-docker.sh to usr/bin/ as did install-emulator-docker.sh in case the user wants the hexagon docker only.
 
