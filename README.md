@@ -147,3 +147,17 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 voxl-hexagon        latest              637d89d3a530        19 minutes ago      5.28GB
 voxl-emulator       latest              0e15518b8f95        1  months ago       1.26GB
 ```
+
+
+## Example Projects
+
+The following are good examples of how to build apps-proc code with the voxl-emulator docker image:
+
+* https://gitlab.com/voxl-public/librc_math
+* https://gitlab.com/voxl-public/voxl-opencv-3-4-6
+* https://gitlab.com/voxl-public/voxl-vision-px4
+
+
+The following are good examples of how to build SDSP code with the voxl-hexagon docker image:
+
+* https://gitlab.com/voxl-public/libvoxl_io
