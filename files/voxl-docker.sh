@@ -110,6 +110,8 @@ fi
 
 docker run \
 	--rm -it \
+	--net=host \
+	--privileged \
 	--name ${INSTANCE_NAME} \
 	-w /home/$(whoami) \
 	--volume="/dev/bus/usb:/dev/bus/usb" \
