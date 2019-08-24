@@ -13,7 +13,6 @@ Note that this image is fairly clean and you will likely have to install build d
 The voxl-hexagon docker image is based on the x86_64 Ubuntu Bionic docker image but additionally contains the Qualcomm Hexagon SDK 3.1 and an ARM cross compiler. For legal reasons these components must be downloaded from their respective sources by the user before building the docker image. However, we provide instructions and an install script here in this project.
 
 
-
 ## Installation Instructions:
 
 The following instructions are for installing docker and the two aforementioned Docker Images in an Ubuntu Desktop Environment. These instructions are tested on Ubuntu 18.04 Bionic but should work on other Ubuntu version supported by Docker.
@@ -48,8 +47,6 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -a -G docker $USER
 sudo reboot
 ```
-
-
 
 #### Install the voxl-emulator Docker Image
 ------------------------------
@@ -101,9 +98,7 @@ voxl-hexagon        latest              6b7bb00b90d0        2 minutes ago       
 voxl-emulator       latest              0e15518b8f95        11 months ago       1.26GB
 ```
 
-
-
-## Use of voxl-docker script
+## Use of voxl-docker Script
 
 ```bash
 $ voxl-docker -h
@@ -133,12 +128,21 @@ the voxl-emulator docker image to test certain behaviors as the root user.
 This more closely mimics the on-target environment as the VOXL image runs as
 root by default. Enter this mode with the -p option.
 
+You can also specify the entrypoint for the docker image launch. By default this
+is set to /bin/bash but can be user-configured with the -e option. This is most
+likely used to pass the docker a command to execute before exiting automatically.
+For example, to build the librc_math project in one command:
+
+~/git/librc_math$ voxl-docker -e "/bin/bash build.sh"
+
+
 ARGUMENTS:
   -h:      : Print this help message
   -d <name>: The name of the directory to mount as ~/ inside the docker
   -i <name>: Docker image to run, usually voxl-emulator or voxl-hexagon
   -p       : for voxl-emulator image ONLY, runs as root user inside docker
   -l       : list installed docker images
+  -e       : set the entrypoint for the docker image launch
 ```
 
 ```bash

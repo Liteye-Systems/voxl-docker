@@ -27,12 +27,21 @@ the voxl-emulator docker image to test certain behaviors as the root user.
 This more closely mimics the on-target environment as the VOXL image runs as
 root by default. Enter this mode with the -p option.
 
+You can also specify the entrypoint for the docker image launch. By default this
+is set to /bin/bash but can be user-configured with the -e option. This is most
+likely used to pass the docker a command to execute before exiting automatically.
+For example, to build the librc_math project in one command:
+
+~/git/librc_math$ voxl-docker -e "/bin/bash build.sh"
+
+
 ARGUMENTS:
   -h:      : Print this help message
   -d <name>: The name of the directory to mount as ~/ inside the docker
   -i <name>: Docker image to run, usually voxl-emulator or voxl-hexagon
   -p       : for voxl-emulator image ONLY, runs as root user inside docker
   -l       : list installed docker images
+  -e       : set the entrypoint for the docker image launch
 EOF
 	exit 1
 }
@@ -44,10 +53,11 @@ IMAGE=$EMULATOR		# run modalai apps proc build docker by default
 PRIVALEDGED=false	# run in non-privaledged mode by default
 USER_OPTS=""
 MOUNT_OPTS=""
+ENTRYPOINT="/bin/bash"
 
 
 # parse arguemnts (if any)
-while getopts 'phd:i:l' opt
+while getopts 'phd:i:le:' opt
 do
 	case $opt in
 	h)
@@ -62,6 +72,9 @@ do
 		;;
 	p)
 		PRIVALEDGED=true
+		;;
+	e)
+		ENTRYPOINT=$OPTARG
 		;;
 	l)
 		docker images
@@ -116,4 +129,4 @@ docker run \
 	-w /home/$(whoami) \
 	--volume="/dev/bus/usb:/dev/bus/usb" \
 	$USER_OPTS $MOUNT_OPTS \
-	${IMAGE} /bin/bash
+	${IMAGE} ${ENTRYPOINT}
