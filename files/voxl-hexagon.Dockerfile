@@ -5,18 +5,14 @@
 ## Copyright (c) 2019 ModalAI, Inc.
 ##
 
-
 FROM ubuntu:bionic
 ENV DEBIAN_FRONTEND noninteractive
-
 
 # Add repo for the right gcc
 RUN apt-get update \
    && apt-get -y --quiet --no-install-recommends install software-properties-common
 
-
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test
-
 
 # Now install the packages
 RUN apt-get update \
@@ -67,7 +63,6 @@ RUN apt-get update \
    && echo "dash dash/sh boolean false" | debconf-set-selections \
    && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
 
-
 # Add a non-root user with the following details:
 # username: user
 # password: user
@@ -75,7 +70,6 @@ RUN apt-get update \
 # Groups   : sudo, user
 RUN /usr/sbin/useradd -m -s /bin/bash -G sudo user \
    && echo user:user | /usr/sbin/chpasswd
-
 
 # Add the files to configure the build environment
 ADD cross_toolchain /opt/cross_toolchain
@@ -90,9 +84,6 @@ ENV DSPAL_DIR=/opt/dspal
 # Add cmake_hexagon macros and toolchain files
 ADD cmake_hexagon /opt/cmake_hexagon
 ENV CMAKE_HEXAGON_DIR=/opt/cmake_hexagon
-
-# Copy DSPAL include directory to hexagon SDK target include directory
-RUN rsync -a /opt/dspal/include/ /opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Tools/8.0.08/Tools/target/hexagon/include/
 
 # Create symbolic link to cross compiler for user
 RUN ln -s /opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11 /opt/Qualcomm/Hexagon_SDK/3.1/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi_linux
