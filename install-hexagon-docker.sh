@@ -12,7 +12,7 @@ if [ ! -f cross_toolchain/downloads/$HEXAGON_BIN ]; then
 	exit 1
 fi
 if [ ! -f cross_toolchain/downloads/$GCC_BIN ]; then
-	echo "GCC cross compiler not found"
+	echo "GCC cross compiler not found (gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabi.tar.xz)"
 	echo "please download to cross_toolchain/downloads/"
 	echo "https://releases.linaro.org/archive/14.11/components/toolchain/binaries/arm-linux-gnueabi"
 	exit 1

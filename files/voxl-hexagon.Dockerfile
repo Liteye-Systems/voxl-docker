@@ -101,3 +101,6 @@ ENV HEXAGON_TOOLS_ROOT=/opt/Qualcomm/Hexagon_SDK/3.1/tools/HEXAGON_Tools/8.0.08/
 ENV ARM_CROSS_GCC_ROOT=/opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11
 ENV HEXAGON_ARM_SYSROOT=/opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11/libc/
 ENV MINI_DM=${HEXAGON_SDK_ROOT}/tools/debug/mini-dm/Linux_Debug/mini-dm
+
+# install openssh
+RUN apt-get install -y openssh-client
