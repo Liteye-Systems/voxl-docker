@@ -104,3 +104,9 @@ ENV MINI_DM=${HEXAGON_SDK_ROOT}/tools/debug/mini-dm/Linux_Debug/mini-dm
 
 # install openssh
 RUN apt-get install -y openssh-client
+
+RUN apt-get install -y lib32z1 lib32ncurses5
+
+RUN apt-get update && \
+      apt-get -y install sudo
+
