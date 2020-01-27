@@ -11,6 +11,5 @@ RUN apt-get -y install --no-install-recommends libgtk2.0-dev
 RUN apt-get clean --yes
 
 RUN apt install -y g++-4.9-aarch64-linux-gnu 
-RUN apt install -y git build-essential
-RUN apt install -y cmake
-RUN apt install -y vim
+RUN apt install -y git build-essential cmake vim
+RUN apt install -y sudo curl
