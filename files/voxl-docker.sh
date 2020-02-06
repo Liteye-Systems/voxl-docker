@@ -4,11 +4,10 @@ function printUsage() {
 	cat <<EOF
 Usage: $(basename $0) [ARGUMENTS]
 
-By default this runs the voxl-emulator image for compiling ARM apps-proc code
-for VOXL. It can also run the voxl-hexagon docker image for cross-compiling
-hexagon SDSP programs. Technically this can also launch any other installed
-docker image with the -i argument but is only intended for the voxl-emulator
-and voxl-hexagon images.
+This is primarily used for running the voxl-emulator image for compiling ARM
+apps-proc code for VOXL and the voxl-hexagon docker image for cross-compiling
+hexagon SDSP programs. This can also launch any other installed docker image
+with the -i argument.
 
 By default this mounts the current working directory as the home directory
 inside the docker for easy compilation of whichever project you are currently
@@ -18,7 +17,7 @@ specified with the -d argument.
 The voxl-hexagon image starts with the username "user" with UID and GID 1000
 which should match the first user on your desktop to avoid permissions issues.
 
-The voxl-emulator image start, by default, with the same username, UID, and GID
+The voxl-emulator image starts, by default, with the same username, UID, and GID
 inside the docker as the user that launched it.
 
 Since the voxl-emulator image is designed to emulate the userspace environment
@@ -32,7 +31,7 @@ is set to /bin/bash but can be user-configured with the -e option. This is most
 likely used to pass the docker a command to execute before exiting automatically.
 For example, to build the librc_math project in one command:
 
-~/git/librc_math$ voxl-docker -e "/bin/bash build.sh"
+~/git/librc_math$ voxl-docker -i voxl-emulator -e "/bin/bash build.sh"
 
 
 ARGUMENTS:
@@ -46,10 +45,10 @@ EOF
 	exit 1
 }
 
-EMULATOR=voxl-emulator
+EMULATOR="voxl-emulator"
 
 MOUNT=`pwd`			# mount current working directory by default
-IMAGE=$EMULATOR		# run modalai apps proc build docker by default
+IMAGE=""
 PRIVALEDGED=false	# run in non-privaledged mode by default
 USER_OPTS=""
 MOUNT_OPTS=""
@@ -86,18 +85,15 @@ do
 		esac
 done
 
-# make unique instance name for the selected image by appending '_1'
-INSTANCE_NAME=${IMAGE}-1
-
-# make sure the container isn't already running
-docker container ls | grep -q ${INSTANCE_NAME}
-if [ $? == 0 ]; then
-	echo "stopping existing instance of $INSTANCE_NAME"
-	docker stop ${INSTANCE_NAME}
+if [[ "${IMAGE}" == "" ]]; then
+	printUsage
+	exit 1
 fi
 
+echo "using image: $IMAGE"
+
 ## the emulator image behaves a little differently
-if [ $IMAGE == $EMULATOR ]; then
+if [[ ${IMAGE} == *"${EMULATOR}"* ]]; then
 	if $PRIVALEDGED ; then
 		USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
 		MOUNT_OPTS="-v ${MOUNT}/:/home/root:rw -w /home/root"
@@ -125,7 +121,6 @@ docker run \
 	--rm -it \
 	--net=host \
 	--privileged \
-	--name ${INSTANCE_NAME} \
 	-w /home/$(whoami) \
 	--volume="/dev/bus/usb:/dev/bus/usb" \
 	$USER_OPTS $MOUNT_OPTS \

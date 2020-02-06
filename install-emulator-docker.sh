@@ -32,8 +32,24 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ################################################################################
 
-IMAGE=modalai-1-0-0
-IMAGE_TAR=${IMAGE}.tar
+IMAGE=voxl-emulator
+IMAGE_TAR=$({IMAGE}.tar)
+
+# count files in current directory matching image anme
+NUM_FILES=$(ls -1q $IMAGE* | wc -l)
+
+if [ $NUM_FILES -eq "0" ]; then
+    echo "ERROR: no voxl-emulator tar/tgz found"
+    exit 1
+elif [ $NUM_FILES -gt "1" ]; then
+    echo "ERROR: more than 1 voxl-emulator image tar found"
+    echo "make sure there is only one in the current directory"
+    exit 1
+fi
+
+# now we know only one file exists
+IMAGE_TAR=$(ls -1q $IMAGE*)
+
 RUN_SCRIPT=voxl-docker
 
 # check prerequisites
@@ -61,9 +77,18 @@ sudo apt install qemu-user-static android-tools-adb android-tools-fastboot
 
 echo "loading docker image"
 sudo docker load -i $IMAGE_TAR
-sudo docker tag $IMAGE:latest voxl-emulator:latest
 
-sudo docker images ${IMAGE} | grep ${IMAGE} || docker pull ${IMAGE}
+echo "tagging image as latest"
+for i in $(docker images | awk '{if (NR!=1) {print $1":"$2","$3}}'); do
+    ID=$(echo $i | cut -d',' -f2)
+    TAG=$(echo $i | cut -d',' -f1)
+    if [[ "${TAG}" == "${IMAGE}"* ]]; then
+        docker tag $ID ${IMAGE}:latest
+        break;
+    fi
+done
+
+
 
 echo "installing ${RUN_SCRIPT}.sh to /usr/local/bin/${RUN_SCRIPT}"
 sudo install -m 0755 files/${RUN_SCRIPT}.sh /usr/local/bin/${RUN_SCRIPT}
