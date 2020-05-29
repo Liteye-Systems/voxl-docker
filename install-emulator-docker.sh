@@ -33,7 +33,6 @@
 ################################################################################
 
 IMAGE=voxl-emulator
-IMAGE_TAR=$({IMAGE}.tar)
 
 # count files in current directory matching image anme
 NUM_FILES=$(ls -1q $IMAGE* | wc -l)
