@@ -103,8 +103,13 @@ if [[ ${IMAGE} == *"${EMULATOR}"* ]]; then
 	fi
 # for all other images
 else
-	USER_OPTS="-u $(id -u ${USER}):$(id -g ${USER})"
-	MOUNT_OPTS="-v ${MOUNT}/:/home/user:rw -w /home/user"
+	if $PRIVALEDGED ; then
+		USER_OPTS=""
+		MOUNT_OPTS="-v ${MOUNT}/:/home/root:rw -w /home/root"
+	else
+		USER_OPTS="-u $(id -u ${USER}):$(id -g ${USER})"
+		MOUNT_OPTS="-v ${MOUNT}/:/home/user:rw -w /home/user"
+	fi
 fi
 
 
