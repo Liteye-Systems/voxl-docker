@@ -72,6 +72,8 @@ if [ ! -f $IMAGE_TAR ]; then
 fi
 
 echo "installing misc. dependencies"
+# qemu-user-static must be installed AFTER binfmt-support for it to install properly
+sudo apt install binfmt-support
 sudo apt install qemu-user-static android-tools-adb android-tools-fastboot
 
 echo "loading docker image"
