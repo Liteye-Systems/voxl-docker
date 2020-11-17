@@ -103,13 +103,12 @@ if [[ ${IMAGE} == *"${EMULATOR}"* ]]; then
 	fi
 # for all other images
 else
-	if $PRIVALEDGED ; then
-		USER_OPTS=""
-		MOUNT_OPTS="-v ${MOUNT}/:/home/root:rw -w /home/root"
-	else
-		USER_OPTS="-u $(id -u ${USER}):$(id -g ${USER})"
-		MOUNT_OPTS="-v ${MOUNT}/:/home/user:rw -w /home/user"
-	fi
+	# tried to find a good way to run as current user inside docker but gave up
+	# so just run as root
+	USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
+	#USER_OPTS="-u $(id -u ${USER}):$(id -g ${USER})"
+	#USER_OPTS="-e LOCAL_USER_ID=$(id -u) -e LOCAL_USER_NAME=$(whoami) -e LOCAL_GID=$(id -g) "
+	MOUNT_OPTS="-v ${MOUNT}/:/home/user:rw -w /home/user"
 fi
 
 
@@ -122,11 +121,23 @@ fi
 # -v			mount desired directory
 # -w			set working directory to home
 
+cmd=(
 docker run \
 	--rm -it \
 	--net=host \
 	--privileged \
 	-w /home/$(whoami) \
 	--volume="/dev/bus/usb:/dev/bus/usb" \
-	$USER_OPTS $MOUNT_OPTS \
-	${IMAGE} ${ENTRYPOINT}
+	$USER_OPTS\
+	$MOUNT_OPTS \
+	${IMAGE}\
+	${ENTRYPOINT})
+
+# print what's going to run
+echo ${cmd[@]}
+echo ""
+# run it!
+"${cmd[@]}"
+
+
+
