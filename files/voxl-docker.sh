@@ -1,37 +1,48 @@
 #!/bin/bash
+################################################################################
+# Copyright (c) 2020 ModalAI, Inc. All rights reserved.
+################################################################################
 
 function printUsage() {
 	cat <<EOF
-Usage: $(basename $0) [ARGUMENTS]
+voxl-docker helper tool V1.1
 
-This is primarily used for running the voxl-emulator image for compiling ARM
-apps-proc code for VOXL and the voxl-hexagon docker image for cross-compiling
-hexagon SDSP programs. This can also launch any other installed docker image
-with the -i argument.
+Usage: $(basename $0) [ARGUMENTS]
+example: voxl-docker -i voxl-emulator
+
+This is primarily intended as an assistant for running the voxl-emulator,
+voxl-cross, and voxl-hexagon docker images for compiling ModalAI projects.
+However this can also launch any other installed docker images. It incorperates
+the long list of arguments normally necessary to make 'docker run' behave to
+make using docker images for compiling easier and faster.
+
+There are a few basic arguments to retain a small amount of fexibility.
 
 By default this mounts the current working directory as the home directory
-inside the docker for easy compilation of whichever project you are currently
-working in. The directory that gets mounted inside the docker can be manually
-specified with the -d argument.
+(/home/root) inside the docker for easy compilation of whichever project you
+are currently working on. The directory that gets mounted inside the docker
+can be manually specified with the -d argument.
 
-The voxl-hexagon image starts with the username "user" with UID and GID 1000
-which should match the first user on your desktop to avoid permissions issues.
+Once inside the docker image, you will run as the root user for easy of
+installing build dependencies and making packages with correct file permissions.
+A typical use would be to build and make the librc_math ipk package:
 
-The voxl-emulator image starts, by default, with the same username, UID, and GID
-inside the docker as the user that launched it.
 
-Since the voxl-emulator image is designed to emulate the userspace environment
-that runs onboard the VOXL itself, you may wish to run as the root user inside
-the voxl-emulator docker image to test certain behaviors as the root user.
-This more closely mimics the on-target environment as the VOXL image runs as
-root by default. Enter this mode with the -p option.
+me@mydesktop:~/git/librc_math$ voxl-docker -i voxl-cross
+using image: voxl-cross
+root@my_desktop:/home/root# ./build.sh both
+root@my_desktop:/home/root# ./make_package.sh
+root@my_desktop:/home/root# exit
+me@mydesktop:~/git/librc_math$
 
-You can also specify the entrypoint for the docker image launch. By default this
-is set to /bin/bash but can be user-configured with the -e option. This is most
-likely used to pass the docker a command to execute before exiting automatically.
-For example, to build the librc_math project in one command:
 
-~/git/librc_math$ voxl-docker -i voxl-emulator -e "/bin/bash build.sh"
+By default this script will start docker images in interactive mode with
+/bin/bash as the entrypoint. However, this entrypoint can be configured with
+the -e option. This is most likely used to pass the docker a command to execute
+before exiting automatically. For example, to build the librc_math project
+in one command:
+
+~/git/librc_math$ voxl-docker -i voxl-cross -e "/bin/bash build.sh both"
 
 
 ARGUMENTS:
@@ -85,12 +96,10 @@ if [[ "${IMAGE}" == "" ]]; then
 	exit 1
 fi
 
-echo "using image: $IMAGE"
-
 
 # run as root inside the docker
-MOUNT_OPTS="-v ${MOUNT}:/home/root:rw -w /home/root"
 USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
+MOUNT_OPTS="-v ${MOUNT}:/home/root:rw -w /home/root"
 
 
 
@@ -116,6 +125,7 @@ docker run \
 	${ENTRYPOINT})
 
 # print what's going to run
+echo "launching image: $IMAGE with the following command:"
 echo ${cmd[@]}
 echo ""
 # run it!
