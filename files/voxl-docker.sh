@@ -38,7 +38,6 @@ ARGUMENTS:
   -h:      : Print this help message
   -d <name>: The name of the directory to mount as ~/ inside the docker
   -i <name>: Docker image to run, usually voxl-emulator or voxl-hexagon
-  -p       : for voxl-emulator image ONLY, runs as root user inside docker
   -l       : list installed docker images
   -e       : set the entrypoint for the docker image launch
 EOF
@@ -49,7 +48,6 @@ EMULATOR="voxl-emulator"
 
 MOUNT=`pwd`			# mount current working directory by default
 IMAGE=""
-PRIVALEDGED=false	# run in non-privaledged mode by default
 USER_OPTS=""
 MOUNT_OPTS=""
 ENTRYPOINT="/bin/bash"
@@ -68,9 +66,6 @@ do
 		;;
 	i)
 		IMAGE="$OPTARG"
-		;;
-	p)
-		PRIVALEDGED=true
 		;;
 	e)
 		ENTRYPOINT=$OPTARG
@@ -92,24 +87,11 @@ fi
 
 echo "using image: $IMAGE"
 
-## the emulator image behaves a little differently
-if [[ ${IMAGE} == *"${EMULATOR}"* ]]; then
-	if $PRIVALEDGED ; then
-		USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
-		MOUNT_OPTS="-v ${MOUNT}/:/home/root:rw -w /home/root"
-	else
-		USER_OPTS="-e LOCAL_USER_ID=$(id -u) -e LOCAL_USER_NAME=$(whoami) -e LOCAL_GID=$(id -g)"
-		MOUNT_OPTS="-v ${MOUNT}:/home/$(whoami):rw -w /home/$(whoami)"
-	fi
-# for all other images
-else
-	# tried to find a good way to run as current user inside docker but gave up
-	# so just run as root
-	USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
-	#USER_OPTS="-u $(id -u ${USER}):$(id -g ${USER})"
-	#USER_OPTS="-e LOCAL_USER_ID=$(id -u) -e LOCAL_USER_NAME=$(whoami) -e LOCAL_GID=$(id -g) "
-	MOUNT_OPTS="-v ${MOUNT}/:/home/user:rw -w /home/user"
-fi
+
+# run as root inside the docker
+MOUNT_OPTS="-v ${MOUNT}:/home/root:rw -w /home/root"
+USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
+
 
 
 # Run docker with the following options:

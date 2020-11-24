@@ -9,7 +9,7 @@ RUN apt-get -y install apt-utils
 RUN apt-get -y upgrade
 
 # basic dev tools
-RUN apt-get -y install build-essential make cmake sudo curl unzip gcc wget git
+RUN apt-get -y install build-essential make cmake sudo curl unzip gcc wget git nano vim
 # 32-bit cross compiler
 RUN apt-get -y install libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi
 RUN apt-get -y install gcc-4.9-arm-linux-gnueabi g++-4.9-arm-linux-gnueabi
