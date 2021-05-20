@@ -21,8 +21,9 @@ fi
 # pull in dspal submodule
 git submodule update --init
 
-# Build Docker image
-docker build -t voxl-hexagon -f files/voxl-hexagon.Dockerfile .
+# Build Docker image, UPDATE THIS VERSION NAME IF YOU REV THE DOCKERFILE
+docker build -t voxl-hexagon:V1.1 -f files/voxl-hexagon.Dockerfile .
+docker tag voxl-hexagon:V1.1 voxl-hexagon:latest
 
 echo "installing ${RUN_SCRIPT}.sh to /usr/local/bin/${RUN_SCRIPT}"
 sudo install -m 0755 files/${RUN_SCRIPT}.sh /usr/local/bin/${RUN_SCRIPT}

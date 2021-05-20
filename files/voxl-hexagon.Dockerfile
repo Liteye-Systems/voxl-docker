@@ -103,10 +103,32 @@ ENV HEXAGON_ARM_SYSROOT=/opt/Qualcomm/ARM_Tools/gcc-4.9-2014.11/libc/
 ENV MINI_DM=${HEXAGON_SDK_ROOT}/tools/debug/mini-dm/Linux_Debug/mini-dm
 
 # install openssh
-RUN apt-get install -y openssh-client
+RUN apt-get update
+RUN apt-get install -y openssh-client lib32z1 lib32ncurses5 sudo
 
-RUN apt-get install -y lib32z1 lib32ncurses5
+# these are required to build opkg
+RUN apt-get -y install libtool libtool-bin autoconf automake pkg-config libcurl4-openssl-dev openssl libssl-dev libgpgme11 libgpgme11-dev
 
-RUN apt-get update && \
-      apt-get -y install sudo
+# opkg needs at least v3.2 of libarchive
+RUN apt-get -y install libarchive-dev
 
+# clean up the package cache to save space
+RUN apt-get -y clean
+
+
+# build and install opkg 0.4.3
+RUN mkdir -p /opt/workspace/
+RUN cd /opt/workspace/
+RUN cd /opt/workspace/ && git clone https://git.yoctoproject.org/git/opkg
+RUN cd /opt/workspace/opkg/ && git checkout tags/v0.4.3
+RUN cd /opt/workspace/opkg/ && ./autogen.sh
+RUN cd /opt/workspace/opkg/ && ./configure --sysconfdir=/etc
+RUN cd /opt/workspace/opkg/ && make
+RUN cd /opt/workspace/opkg/ && make install
+RUN ldconfig
+
+# cleanup the opkg source
+RUN rm -rf /opt/workspace/opkg
+
+# install our opkg config file
+ADD files/opkg.conf /etc/opkg/opkg.conf
