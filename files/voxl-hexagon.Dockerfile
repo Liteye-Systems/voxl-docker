@@ -132,3 +132,5 @@ RUN rm -rf /opt/workspace/opkg
 
 # install our opkg config file
 ADD files/opkg.conf /etc/opkg/opkg.conf
+ADD files/hexagon_profile  /etc/profile
+

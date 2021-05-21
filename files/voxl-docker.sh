@@ -61,7 +61,7 @@ MOUNT=`pwd`			# mount current working directory by default
 IMAGE=""
 USER_OPTS=""
 MOUNT_OPTS=""
-ENTRYPOINT="/bin/bash"
+ENTRYPOINT="/bin/bash -l" # login shell so it loads /etc/profile
 
 
 # parse arguemnts (if any)

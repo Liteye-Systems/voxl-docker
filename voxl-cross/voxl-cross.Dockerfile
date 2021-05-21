@@ -1,6 +1,6 @@
 ## use 16.04 for now since it has gcc-4.9 in the standard repos
 ## update to something newer once VOXL is on a newer glibc
-FROM ubuntu:16.04
+FROM  ubuntu:16.04
 
 # update base packages in noninteractive mode
 ENV DEBIAN_FRONTEND noninteractive
@@ -46,6 +46,9 @@ ADD opkg.conf /etc/opkg/opkg.conf
 # add our toolchain files
 ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
+
+# add our own bash profile
+ADD cross_profile /etc/profile
 
 
 
