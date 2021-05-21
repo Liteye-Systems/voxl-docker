@@ -5,7 +5,7 @@ RUN_SCRIPT=voxl-docker
 
 # Build Docker image
 cd voxl-cross
-docker build --no-cache -t voxl-cross:V1.1 -f voxl-cross.Dockerfile .
+docker build -t voxl-cross:V1.1 -f voxl-cross.Dockerfile .
 docker tag voxl-cross:V1.1 voxl-cross:latest
 cd ../
 

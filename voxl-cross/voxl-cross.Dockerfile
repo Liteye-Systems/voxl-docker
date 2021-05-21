@@ -49,6 +49,9 @@ ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
 
 # add our own bash profile
 ADD cross_profile /etc/profile
+ADD qualcomm-proprietary_0.0.1.ipk /tmp/
+RUN opkg install /tmp/qualcomm-proprietary_0.0.1.ipk
+RUN rm -rf /tmp/qualcomm-proprietary_0.0.1.ipk
 
 
 

@@ -17,13 +17,6 @@ if [ "$HOME" = "/home/root" ]; then
    PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 fi
 
-if [ -d /etc/profile.d ]; then
-  for i in /etc/profile.d/* ; do
-    . $i
-  done
-  unset i
-fi
-
 RESET_ALL="\[\e[0m\]"
 
 SET_BOLD="\[\e[1m\]"

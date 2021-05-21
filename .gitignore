@@ -5,3 +5,4 @@
 adsp-proc-examples
 *.tgz
 *.ipk
+voxl-cross/*.ipk
