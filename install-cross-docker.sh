@@ -1,12 +1,13 @@
 #!/bin/bash
 
+VERSION="V1.2"
 RUN_SCRIPT=voxl-docker
 
 
 # Build Docker image
 cd voxl-cross
-docker build -t voxl-cross:V1.1 -f voxl-cross.Dockerfile .
-docker tag voxl-cross:V1.1 voxl-cross:latest
+docker build -t voxl-cross:${VERSION} -f voxl-cross.Dockerfile .
+docker tag voxl-cross:${VERSION} voxl-cross:latest
 cd ../
 
 # install the voxl-docker helper script
