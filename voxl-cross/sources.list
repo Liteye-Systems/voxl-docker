@@ -4,15 +4,15 @@
 # It specifies amd64 architecture since we are going to add armhf and arm64
 # later and this prevents apt from searching all these repos for arm and amd64
 
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial main restricted
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates main restricted
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial universe
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates universe
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial multiverse
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial-updates multiverse
-deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt xenial-backports main restricted universe multiverse
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic main restricted
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic-updates main restricted
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic universe
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic-updates universe
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic multiverse
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic-updates multiverse
+deb [arch=amd64] mirror://mirrors.ubuntu.com/mirrors.txt bionic-backports main restricted universe multiverse
 
-deb [arch=amd64] http://security.ubuntu.com/ubuntu xenial-security main restricted
-deb [arch=amd64] http://security.ubuntu.com/ubuntu xenial-security universe
-deb [arch=amd64] http://security.ubuntu.com/ubuntu xenial-security multiverse
+deb [arch=amd64] http://security.ubuntu.com/ubuntu bionic-security main restricted
+deb [arch=amd64] http://security.ubuntu.com/ubuntu bionic-security universe
+deb [arch=amd64] http://security.ubuntu.com/ubuntu bionic-security multiverse
 

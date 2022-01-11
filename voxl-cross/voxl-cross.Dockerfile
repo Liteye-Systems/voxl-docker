@@ -1,9 +1,11 @@
-## start with 16.04 so we can still get the gcc 4.9 cross compiler
+## start with 18.04 bionic to match 865 image
+FROM  ubuntu:18.04
 
-FROM  ubuntu:16.04
 
 ## new primary sources list with some tweaks
 COPY sources.list /etc/apt/sources.list
+## add the older xenial universe and main repos for gcc 4.9
+COPY xenial-sources.list /etc/apt/sources.list.d
 
 
 # update base packages in noninteractive mode
@@ -23,14 +25,14 @@ RUN apt-get -y install gcc-4.9-aarch64-linux-gnu g++-4.9-aarch64-linux-gnu
 # these are misc things we need for building the kernel
 RUN apt-get -y install gawk gperf help2man texinfo gperf bison flex texinfo make libncurses5-dev python-dev
 # these are required to build opkg
-RUN apt-get -y install libtool libtool-bin autoconf automake pkg-config libcurl4-openssl-dev openssl libssl-dev libgpgme11 libgpgme11-dev
+RUN apt-get -y install libtool libtool-bin autoconf automake pkg-config libcurl4-openssl-dev openssl libssl-dev libgpgme11 libgpgme-dev
 # opkg needs at least v3.2 of libarchive
-RUN apt-get -y install libarchive-dev/xenial-backports
+RUN apt-get -y install libarchive-dev
+
 
 
 # Setup to allow multiarch for apt package installations
 COPY arm-cross-compile-sources.list /etc/apt/sources.list.d
-RUN dpkg --add-architecture armhf
 RUN dpkg --add-architecture arm64
 
 # update with the new architectures
@@ -63,6 +65,8 @@ ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
 
 # add our own bash profile
 ADD cross_profile /etc/profile
+ADD git-prompt.sh /share/modalai/
+
 
 # use opkg to install the qualcomm-proprietary package
 RUN apt-get -y install rsync
