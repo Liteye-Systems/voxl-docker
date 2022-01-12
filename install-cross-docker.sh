@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="V1.2"
+VERSION="V1.3"
 RUN_SCRIPT=voxl-docker
 
 
