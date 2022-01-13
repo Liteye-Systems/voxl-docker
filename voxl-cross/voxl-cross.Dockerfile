@@ -75,6 +75,10 @@ RUN opkg install /tmp/qualcomm-proprietary_0.0.1.ipk
 RUN rm -rf /tmp/qualcomm-proprietary_0.0.1.ipk
 
 
+# add gcc 8
+RUN export PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
+ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
+RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 
-
-
+# clean package archive to save space at the end
+RUN apt-get -y clean
