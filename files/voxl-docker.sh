@@ -1,17 +1,17 @@
 #!/bin/bash
 ################################################################################
-# Copyright (c) 2020 ModalAI, Inc. All rights reserved.
+# Copyright (c) 2022 ModalAI, Inc. All rights reserved.
 ################################################################################
 
 function printUsage() {
 	cat <<EOF
-voxl-docker helper tool V1.1
+voxl-docker helper tool V1.2
 
 Usage: $(basename $0) [ARGUMENTS]
 example: voxl-docker -i voxl-emulator
 
 This is primarily intended as an assistant for running the voxl-emulator,
-voxl-cross, and voxl-hexagon docker images for compiling ModalAI projects.
+qrb5165-emulator, voxl-cross, and voxl-hexagon docker images for compiling ModalAI projects.
 However this can also launch any other installed docker images. It incorperates
 the long list of arguments normally necessary to make 'docker run' behave to
 make using docker images for compiling easier and faster.
@@ -19,11 +19,11 @@ make using docker images for compiling easier and faster.
 There are a few basic arguments to retain a small amount of fexibility.
 
 By default this mounts the current working directory as the home directory
-(/home/root) inside the docker for easy compilation of whichever project you
+(/home/root or /home/user) inside the docker for easy compilation of whichever project you
 are currently working on. The directory that gets mounted inside the docker
 can be manually specified with the -d argument.
 
-Once inside the docker image, you will run as the root user for easy of
+Once inside the docker image, you will run as the root user for ease of
 installing build dependencies and making packages with correct file permissions.
 A typical use would be to build and make the librc_math ipk package:
 
@@ -48,7 +48,7 @@ in one command:
 ARGUMENTS:
   -h:      : Print this help message
   -d <name>: The name of the directory to mount as ~/ inside the docker
-  -i <name>: Docker image to run, usually voxl-emulator or voxl-hexagon
+  -i <name>: Docker image to run, usually voxl-emulator, qrb5165-emulator, or voxl-hexagon
   -l       : list installed docker images
   -e       : set the entrypoint for the docker image launch
 EOF
@@ -100,7 +100,10 @@ fi
 # run as root inside the docker
 USER_OPTS="-e LOCAL_USER_ID=0 -e LOCAL_USER_NAME=root -e LOCAL_GID=0"
 MOUNT_OPTS="-v ${MOUNT}:/home/root:rw -w /home/root"
-
+PLATFORM_OPTS=""
+if [[ $IMAGE = "qrb5165-emulator" ]]; then
+	PLATFORM_OPTS="--platform linux/arm64/v8"
+fi
 
 
 # Run docker with the following options:
@@ -119,8 +122,9 @@ docker run \
 	--privileged \
 	-w /home/$(whoami) \
 	--volume="/dev/bus/usb:/dev/bus/usb" \
-	$USER_OPTS\
+	$USER_OPTS \
 	$MOUNT_OPTS \
+	$PLATFORM_OPTS \
 	${IMAGE}\
 	${ENTRYPOINT})
 
@@ -130,6 +134,3 @@ echo ${cmd[@]}
 echo ""
 # run it!
 "${cmd[@]}"
-
-
-
