@@ -10,17 +10,17 @@ COPY xenial-sources.list /etc/apt/sources.list.d
 
 # update base packages in noninteractive mode
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -y update
+RUN apt-get -y  update
 RUN apt-get -y install apt-utils sudo
 RUN apt-get -y upgrade
 
 
 # basic dev tools
 RUN apt-get -y install build-essential make cmake sudo curl unzip gcc wget git nano vim
-# 32-bit cross compiler
+# 32-bit cross compiler for 820
 RUN apt-get -y install libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi
 RUN apt-get -y install gcc-4.9-arm-linux-gnueabi g++-4.9-arm-linux-gnueabi
-# 64-bit cross compiler
+# 64-bit cross compiler for 820
 RUN apt-get -y install gcc-4.9-aarch64-linux-gnu g++-4.9-aarch64-linux-gnu
 # these are misc things we need for building the kernel
 RUN apt-get -y install gawk gperf help2man texinfo gperf bison flex texinfo make libncurses5-dev python-dev
@@ -28,6 +28,10 @@ RUN apt-get -y install gawk gperf help2man texinfo gperf bison flex texinfo make
 RUN apt-get -y install libtool libtool-bin autoconf automake pkg-config libcurl4-openssl-dev openssl libssl-dev libgpgme11 libgpgme-dev
 # opkg needs at least v3.2 of libarchive
 RUN apt-get -y install libarchive-dev
+
+# add glibc2.23 files for cross-compiling
+ADD glibc_2.23_files.tar.xz /tmp/
+RUN mv /tmp/glibc_2.23_files/* /usr/
 
 
 
@@ -72,8 +76,6 @@ RUN rm -rf /tmp/qualcomm-proprietary_0.0.1.ipk
 
 
 # add gcc 8
-# start by making a copy of our aarch64 gcc 4.9 stuff that we still need for 820
-RUN cp -R /usr/aarch64-linux-gnu /usr/aarch64-linux-gnu-4.9/
 RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 
 # clean package archive to save space at the end
