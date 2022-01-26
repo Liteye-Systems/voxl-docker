@@ -59,10 +59,6 @@ RUN rm -rf /opt/workspace/opkg
 # install our opkg config file
 ADD opkg.conf /etc/opkg/opkg.conf
 
-# add our toolchain files
-ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
-ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
-
 # add our own bash profile
 ADD cross_profile /etc/profile
 ADD git-prompt.sh /share/modalai/
@@ -76,9 +72,14 @@ RUN rm -rf /tmp/qualcomm-proprietary_0.0.1.ipk
 
 
 # add gcc 8
-ENV PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
-ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
+# start by making a copy of our aarch64 gcc 4.9 stuff that we still need for 820
+RUN cp -R /usr/aarch64-linux-gnu /usr/aarch64-linux-gnu-4.9/
 RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 
 # clean package archive to save space at the end
 RUN apt-get -y clean
+
+# add our toolchain files
+ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
+ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
+ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
