@@ -25,6 +25,11 @@ voxl-emulator simulates the VOXL system image and is built alongside the base sy
 
 This must be downloaded from https://downloads.modalai.com and cannot be built by itself without rebuiling the entire system image from source.
 
+## qrb5165-emulator
+
+qrb5165-emulator simulates the qrb5165 system image and is built alongside the base system image. qrb5165-emulator builds 64-bit ARM binaries using the native ARM gcc. It is an ARM docker image that runs on x86 using qemu as an emulator, it is therefore slower than voxl-cross which is native x86, but has the advantage of emulating the qrb5165 platform sysroot.
+
+More details can be found [here](qrb5165-emulator/README.md)
 
 ## How to Build voxl-cross
 
