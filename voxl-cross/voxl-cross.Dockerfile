@@ -82,6 +82,11 @@ RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 # clean package archive to save space at the end
 RUN apt-get -y clean
 
+
+# update cmake to a newer version
+ADD update_cmake.sh /tmp/
+RUN /bin/bash /tmp/update_cmake.sh
+
 # add our toolchain files
 ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
