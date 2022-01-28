@@ -75,7 +75,8 @@ RUN opkg install /tmp/qualcomm-proprietary_0.0.1.ipk
 RUN rm -rf /tmp/qualcomm-proprietary_0.0.1.ipk
 
 
-# add gcc 8
+# add gcc 7 and 8. 7 is recommended for 865, 8 is for fun
+RUN apt-get -y install gcc-7-aarch64-linux-gnu g++-7-aarch64-linux-gnu
 RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 
 # clean package archive to save space at the end
@@ -84,4 +85,5 @@ RUN apt-get -y clean
 # add our toolchain files
 ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
+ADD aarch64-gnu-7.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
