@@ -11,6 +11,6 @@ set(CMAKE_C_COMPILER ${tools}/bin/aarch64-linux-gnu-gcc-8)
 set(CMAKE_CXX_COMPILER ${tools}/bin/aarch64-linux-gnu-g++-8)
 
 # set architecture
-set(CMAKE_C_FLAGS   "-march=armv8.2-a -mtune=cortex-a75.cortex-a55 ${CMAKE_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "-march=armv8.2-a -mtune=cortex-a75.cortex-a55 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_C_FLAGS   "-march=armv8.2-a ${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "-march=armv8.2-a ${CMAKE_CXX_FLAGS}")
 
