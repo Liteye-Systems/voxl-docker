@@ -13,6 +13,9 @@ echo "building"
 ./bootstrap
 make -j$(nproc)
 sudo make install
+cd /tmp
+rm -rf cmake-$version.$build/
+rm -f cmake-$version.$build.tar.gz
 
 echo "done building cmake $version Test install using cmake --version"
 cmake --version
