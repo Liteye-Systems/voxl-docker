@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="V1.6"
+VERSION="V1.7"
 RUN_SCRIPT=voxl-docker
 
 # Add bash utilities
