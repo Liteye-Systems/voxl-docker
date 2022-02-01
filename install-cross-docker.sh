@@ -5,6 +5,13 @@ set -e
 VERSION="V1.7"
 RUN_SCRIPT=voxl-docker
 
+
+CLEAN=""
+if [ "$1" == "clean" ]; then
+	CLEAN="--no-cache"
+	echo "starting clean build"
+fi
+
 # Add bash utilities
 cd bash_utilities
 ./make_package.sh
@@ -13,7 +20,7 @@ cp ./bash_utilities/bash_utilities.tar voxl-cross/
 
 # Build Docker image
 cd voxl-cross
-docker build -t voxl-cross:${VERSION} -f voxl-cross.Dockerfile .
+docker build $CLEAN -t voxl-cross:${VERSION} -f voxl-cross.Dockerfile .
 docker tag voxl-cross:${VERSION} voxl-cross:latest
 cd ../
 
