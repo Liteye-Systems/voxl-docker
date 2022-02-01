@@ -10,13 +10,13 @@ COPY xenial-sources.list /etc/apt/sources.list.d
 
 # update base packages in noninteractive mode
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -y  update
+RUN apt-get -y update
 RUN apt-get -y install apt-utils sudo
 RUN apt-get -y upgrade
 
 
 # basic dev tools
-RUN apt-get -y install build-essential make cmake sudo curl unzip gcc wget git nano vim
+RUN apt-get -y install build-essential make cmake sudo curl unzip gcc wget git nano vim xterm
 # 32-bit cross compiler for 820
 RUN apt-get -y install libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi
 RUN apt-get -y install gcc-4.9-arm-linux-gnueabi g++-4.9-arm-linux-gnueabi
@@ -33,8 +33,6 @@ RUN apt-get -y install libarchive-dev
 ADD glibc_2.23_files.tar.xz /tmp/
 RUN mv /tmp/glibc_2.23_files/* /usr/
 
-
-
 # Setup to allow multiarch for apt package installations
 COPY arm-cross-compile-sources.list /etc/apt/sources.list.d
 RUN dpkg --add-architecture arm64
@@ -44,7 +42,6 @@ RUN apt-get -y update
 
 # clean up the package cache to save space
 RUN apt-get -y clean
-
 
 # build and install opkg 0.4.3
 RUN mkdir -p /opt/workspace/
@@ -63,11 +60,6 @@ RUN rm -rf /opt/workspace/opkg
 # install our opkg config file
 ADD opkg.conf /etc/opkg/opkg.conf
 
-# add our own bash profile
-ADD cross_profile /etc/profile
-ADD git-prompt.sh /share/modalai/
-
-
 # use opkg to install the qualcomm-proprietary package
 RUN apt-get -y install rsync
 ADD qualcomm-proprietary_0.0.1.ipk /tmp/
@@ -82,7 +74,6 @@ RUN apt-get -y install gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
 # clean package archive to save space at the end
 RUN apt-get -y clean
 
-
 # update cmake to a newer version
 ADD update_cmake.sh /tmp/
 RUN /bin/bash /tmp/update_cmake.sh
@@ -92,3 +83,7 @@ ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-7.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
+
+# add bash stuff
+ADD bash_utilities.tar /
+RUN echo "voxl-cross" > /etc/modalai/image.name
