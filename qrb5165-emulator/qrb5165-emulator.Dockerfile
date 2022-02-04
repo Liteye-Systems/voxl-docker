@@ -9,12 +9,18 @@ ADD data/rootfs /
 # required for ARM emulation
 COPY ./bin/qemu-arm-static /usr/bin/qemu-arm-static
 
+# fix permissions on /tmp to let apt update run
+RUN chmod 1777 /tmp
+
 # install helpers
 RUN apt-get -y update
 RUN apt-get -y install git cmake sudo
 
 # install common dependencies
 RUN apt-get -y install libusb-1.0-0 libusb-1.0-0-dev
+
+# 32-bit cross compiler for mv-based things
+RUN apt-get install -y g++-7-multilib-arm-linux-gnueabi
 
 # Install GStreamer RTSP server development files since they aren't included
 # with the rootfs
