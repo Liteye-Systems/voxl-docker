@@ -47,6 +47,12 @@ To build this yourself:
 ~/git/voxl-docker$ ./install-cross-docker.sh
 ```
 
+To compress a docker image for export after it's built:
+
+```
+docker save voxl-cross:V1.8 | gzip > voxl-cross_V1.8.tgz
+```
+
 ## How to build voxl-hexagon
 
 Like voxl-cross, voxl-hexagon is an ubuntu based docker image, but contains the hexagon SDSP sdk for building SDSP projects like libvoxl_io. It also contains the opkg package manager for installing build dependencies.
