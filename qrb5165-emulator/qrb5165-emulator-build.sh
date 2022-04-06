@@ -3,7 +3,7 @@
 echo "[INFO] Building qrb5165-emulator docker image"
 
 IMAGE_NAME="qrb5165-emulator"
-IMAGE_TAG="1.1.1"
+IMAGE_TAG="1.3"
 
 if ! [[ -d data/rootfs ]]; then
     echo "[ERROR] Missing rootfs.  See README for instructions"

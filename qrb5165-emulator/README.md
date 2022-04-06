@@ -46,6 +46,7 @@ The version (e.g. `1.1.1`) should match the `IMAGE_TAG` variable in the `qrb5165
 Now, build the image by running the following:
 
 ```bash
+cd ../
 ./qrb5165-emulator-build.sh
 ```
 

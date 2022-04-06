@@ -16,6 +16,10 @@ RUN chmod 1777 /tmp
 RUN apt-get -y update
 RUN apt-get -y install git cmake sudo
 
+# remove opencv
+RUN apt-get -y remove libopencv-dev
+RUN apt-get -y autoremove
+
 # install common dependencies
 RUN apt-get -y install libusb-1.0-0 libusb-1.0-0-dev
 
