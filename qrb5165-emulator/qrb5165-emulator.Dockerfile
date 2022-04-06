@@ -14,7 +14,7 @@ RUN chmod 1777 /tmp
 
 # install helpers
 RUN apt-get -y update
-RUN apt-get -y install git cmake sudo
+RUN apt-get -y install git cmake sudo nano
 
 # remove opencv
 RUN apt-get -y remove libopencv-dev
@@ -24,7 +24,7 @@ RUN apt-get -y autoremove
 RUN apt-get -y install libusb-1.0-0 libusb-1.0-0-dev
 
 # 32-bit cross compiler for mv-based things
-RUN apt-get install -y g++-7-multilib-arm-linux-gnueabi
+RUN apt-get -y install g++-7-multilib-arm-linux-gnueabi gcc-7-multilib-arm-linux-gnueabi
 
 # Install GStreamer RTSP server development files since they aren't included
 # with the rootfs
@@ -35,11 +35,21 @@ RUN apt-get -y install libgstrtspserver-1.0-dev
 RUN mkdir -p /etc/modalai
 RUN touch /etc/modalai/qrb5165-emulator.id
 
-# TODO: Change the prompt
-# RUN echo PS1="\"\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$\"" > /root/.bashrc
-# RUN echo 'export PS1="\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$' >> /root/.bash_profile
+RUN apt-get install -y git build-essential autoconf automake autopoint libtool pkg-config -y
+RUN apt-get install -y gtk-doc-tools libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev -y
+RUN apt-get install -y checkinstall
 
-# start in /home/root
-WORKDIR /home/root
+
+# Change the prompt
+RUN echo PS1="\"\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ \"" > /root/.bashrc
+RUN echo 'export PS1="\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ "' >> /root/.bash_profile
+
+# fix permissions on /usr/lib32 stuff
+RUN chmod 755 /usr/lib32/*
+RUN chmod 755 /lib/ld-linux.so.3
+RUN chmod 755 /opt/qcom-licenses/snapdragon-flight-license.bin
+
+# start in /root
+WORKDIR /root/
 
 CMD ["/bin/bash"]
