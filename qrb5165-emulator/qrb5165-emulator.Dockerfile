@@ -12,6 +12,9 @@ COPY ./bin/qemu-arm-static /usr/bin/qemu-arm-static
 # fix permissions on /tmp to let apt update run
 RUN chmod 1777 /tmp
 
+# remove old apt line from rootfs
+RUN rm -f /etc/apt/sources.list.d/modalai.list
+
 # install helpers
 RUN apt-get -y update
 RUN apt-get -y install git cmake sudo nano
@@ -40,14 +43,37 @@ RUN apt-get install -y gtk-doc-tools libglib2.0-dev libgstreamer1.0-dev libgstre
 RUN apt-get install -y checkinstall
 
 
-# Change the prompt
-RUN echo PS1="\"\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ \"" > /root/.bashrc
-RUN echo 'export PS1="\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ "' >> /root/.bash_profile
+# # Change the prompt
+# RUN echo PS1="\"\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ \"" > /root/.bashrc
+# RUN echo 'export PS1="\[\e[1m\]\[\e[33m\]qrb5165-emulator\[\e[0m\]:\[\e[1m\]\[\e[34m\]\w\[\e[0m\]$ "' >> /root/.bash_profile
 
 # fix permissions on /usr/lib32 stuff
 RUN chmod 755 /usr/lib32/*
 RUN chmod 755 /lib/ld-linux.so.3
 RUN chmod 755 /opt/qcom-licenses/snapdragon-flight-license.bin
+
+
+# add ROS stuff for mpa-to-ros
+RUN echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+RUN apt update
+RUN apt install -y ros-melodic-ros-base
+RUN apt install -y ros-melodic-camera-info-manager
+RUN apt install -y ros-melodic-tf2-ros
+RUN apt install -y ros-melodic-catkin
+RUN apt install -y python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+RUN rosdep init
+RUN rosdep update
+
+
+# add bash stuff
+ADD bash_utilities.tar /
+RUN echo "qrb5165-emulator" > /etc/modalai/image.name
+
+
+# clean package archive to save space at the end
+RUN apt -y upgrade
+RUN apt-get -y clean
 
 # start in /root
 WORKDIR /root/
