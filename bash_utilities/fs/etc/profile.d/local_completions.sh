@@ -1,4 +1,8 @@
 
+AVAILABLE_SECTIONS=( "$(wget http://voxl-packages.modalai.com/dists/qrb5165 -q -O- | grep ' -' | cut -d '>' -f 2 | cut -d '/' -f 1 )" )
+
+AVAILABLE_DISTS=( "$( wget http://voxl-packages.modalai.com/dists -q -O- | grep ' -' | cut -d '>' -f 2 | cut -d '/' -f 1 )" )
+
 __make_package_sh(){
     local OPTS=('help ipk deb timestamp')
 
@@ -30,10 +34,10 @@ __make_package_sh(){
 complete -F __make_package_sh ./make_package.sh
 
 __build_sh(){
-    local OPTS=('help 820 865 native')
-    COMPREPLY=()
+    local DISTS=( "$( cat build.sh | grep AVAILABLE | cut -d '"' -f 2 )" )
+    COMPREPLY=(" ")
     if [ "$COMP_CWORD" -eq 1 ]; then
-        COMPREPLY=( $(compgen -W '${OPTS}' -- ${COMP_WORDS[COMP_CWORD]}) )
+        COMPREPLY=( $(compgen -W '${DISTS}' -- ${COMP_WORDS[COMP_CWORD]}) )
         return 0
     fi
 }
@@ -49,10 +53,13 @@ __deploy_sh(){
 complete -F __deploy_sh ./deploy_to_voxl.sh
 
 __install_build_deps_sh(){
-    local OPTS=('help stable dev stable-deb dev-deb')
+    local DISTS=( "$( cat install_build_deps.sh | grep AVAILABLE | cut -d '"' -f 2 )" )
     COMPREPLY=(" ")
     if [ "$COMP_CWORD" -eq 1 ]; then
-        COMPREPLY=( $(compgen -W '${OPTS}' -- ${COMP_WORDS[COMP_CWORD]}) )
+        COMPREPLY=( $(compgen -W '${DISTS}' -- ${COMP_WORDS[COMP_CWORD]}) )
+        return 0
+    elif [ "$COMP_CWORD" -eq 2 ]; then
+        COMPREPLY=( $(compgen -W '${AVAILABLE_SECTIONS}' -- ${COMP_WORDS[COMP_CWORD]}) )
         return 0
     fi
 }

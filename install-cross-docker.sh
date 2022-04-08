@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="V1.8"
+VERSION="V1.9"
 RUN_SCRIPT=voxl-docker
 
 

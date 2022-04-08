@@ -39,7 +39,7 @@ Note you don't need to build this yourself, you can just download it from https:
 
 To build this yourself:
 
-1) download the qualcomm-proprietary_0.0.1.ipk package from https://downloads.modalai.com and place it here in the voxl-cross directory.
+1) download the qualcomm-proprietary_0.0.1.ipk and qrb5165-proprietary_0.0.1_arm64.deb packages from https://downloads.modalai.com and place the voxl-cross directory.
 
 2) run the install-cross-docker.sh script
 

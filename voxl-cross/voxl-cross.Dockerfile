@@ -60,6 +60,12 @@ RUN rm -rf /opt/workspace/opkg
 # install our opkg config file
 ADD opkg.conf /etc/opkg/opkg.conf
 
+# update with the new architectures
+RUN apt-get -y update
+
+# clean up the package cache to save space
+RUN apt-get -y clean
+
 # use opkg to install the qualcomm-proprietary package
 RUN apt-get -y install rsync
 ADD qualcomm-proprietary_0.0.1.ipk /tmp/
@@ -83,6 +89,12 @@ ADD arm-gnueabi-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-7.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
+
+# Add the qrb proprietary to a local apt repo so projects can install it if they wish
+ADD qrb5165-proprietary*.deb /data/offline_packages/
+RUN cd /data/offline_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+RUN echo "deb [trusted=yes] file:/data/offline_packages/ ./" > /etc/apt/sources.list.d/local.list
+RUN apt-get update
 
 # add bash stuff
 ADD bash_utilities.tar /
