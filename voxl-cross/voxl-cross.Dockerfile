@@ -1,5 +1,5 @@
 ## start with 18.04 bionic to match 865 image
-FROM  ubuntu:18.04
+FROM --platform=linux/amd64 ubuntu:18.04
 
 
 ## new primary sources list with some tweaks
