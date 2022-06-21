@@ -91,10 +91,18 @@ ADD aarch64-gnu-7.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
 
 # Add the qrb proprietary to a local apt repo so projects can install it if they wish
-ADD qrb5165-proprietary*.deb /data/offline_packages/
-RUN cd /data/offline_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-RUN echo "deb [trusted=yes] file:/data/offline_packages/ ./" > /etc/apt/sources.list.d/local.list
+ADD qrb5165-proprietary*.deb /data/offline_deb_packages/
+RUN cd /data/offline_deb_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+RUN echo "deb [trusted=yes] file:/data/offline_deb_packages/ ./" > /etc/apt/sources.list.d/local.list
 RUN apt-get update
+
+# Add the apq proprietary to a local file so projects can install it if they wish
+# We can't setup a local opkg repo like we do for apt because opkg doesn't play nice
+ADD apq8096-proprietary*.ipk /data/offline_ipk_packages/
+
+# add nettools
+RUN apt-get -y install net-tools sshpass iputils-ping
+RUN apt-get -y clean
 
 # add bash stuff
 ADD bash_utilities.tar /

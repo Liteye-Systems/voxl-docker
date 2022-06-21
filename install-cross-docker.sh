@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="V1.9"
+VERSION="V2.0"
 RUN_SCRIPT=voxl-docker
 
 
@@ -23,9 +23,6 @@ cd voxl-cross
 docker build $CLEAN -t voxl-cross:${VERSION} -f voxl-cross.Dockerfile .
 docker tag voxl-cross:${VERSION} voxl-cross:latest
 cd ../
-
-# Clean the bash utilities file
-rm voxl-cross/bash_utilities.tar
 
 # install the voxl-docker helper script
 echo "installing ${RUN_SCRIPT}.sh to /usr/local/bin/${RUN_SCRIPT}"

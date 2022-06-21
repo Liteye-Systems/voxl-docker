@@ -29,12 +29,21 @@ if [ -d /etc/profile.d ]; then
   unset i
 fi
 
+__get_proj_ver() {
+    local file="$( git rev-parse --show-toplevel 2>/dev/null )/pkg/control/control"
+    ! [ -f $file ] && return
+
+    echo "($(cat $file | grep "Version" | cut -d' ' -f 2))"
+}
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+git config --global --add safe.directory '*'
+
 # setup PS1
 PS1=""
-#check to see if we support resizing the terminal
-if [[ $(type -t resize) == file ]]; then
-    PS1+="\$( resize > /dev/null )"
-fi
 # let user know they are in the docker image
 if [ -f /etc/modalai/image.name ]; then
     PS1+="${RAW_SET_BOLD}${RAW_CLR_YLW}$(cat /etc/modalai/image.name)${RAW_RESET_ALL}:"
@@ -44,9 +53,9 @@ fi
 # Add working directory
 PS1+="${RAW_SET_BOLD}${RAW_CLR_BLU}\w${RAW_RESET_ALL}"
 #check for git completion
-if [[ $(type -t __git_ps1) == function ]]; then
-    PS1+="${RAW_CLR_LIT_YLW}\$(__git_ps1 '(%s)')${RAW_RESET_ALL}"
-fi
+PS1+="${RAW_CLR_LIT_YLW}\$(__git_ps1 '(%s)')${RAW_RESET_ALL}"
+# Add the project version
+PS1+="${RAW_CLR_LIT_RED}\$(__get_proj_ver)${RAW_RESET_ALL}"
 # close it out with a clean dollar sign
 PS1+="\$ "
 
@@ -60,3 +69,6 @@ export OPIEDIR QPEDIR QTDIR EDITOR TERM
 
 umask 022
 
+if [ -f ~/.dockerrc ] ; then
+    . ~/.dockerrc
+fi
