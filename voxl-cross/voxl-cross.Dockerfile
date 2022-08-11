@@ -90,6 +90,7 @@ ADD aarch64-gnu-4.9.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-7.toolchain.cmake /opt/cross_toolchain/
 ADD aarch64-gnu-8.toolchain.cmake /opt/cross_toolchain/
 
+# V2.0
 # Add the qrb proprietary to a local apt repo so projects can install it if they wish
 ADD qrb5165-proprietary*.deb /data/offline_deb_packages/
 RUN cd /data/offline_deb_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
@@ -100,10 +101,16 @@ RUN apt-get update
 # We can't setup a local opkg repo like we do for apt because opkg doesn't play nice
 ADD apq8096-proprietary*.ipk /data/offline_ipk_packages/
 
+# add bash stuff
+ADD bash_utilities.tar /
+RUN echo "voxl-cross" > /etc/modalai/image.name
+
 # add nettools
 RUN apt-get -y install net-tools sshpass iputils-ping
 RUN apt-get -y clean
 
-# add bash stuff
-ADD bash_utilities.tar /
-RUN echo "voxl-cross" > /etc/modalai/image.name
+# V2.1
+# add python3
+RUN apt-get update
+RUN apt-get -y install python3
+RUN apt-get -y clean
