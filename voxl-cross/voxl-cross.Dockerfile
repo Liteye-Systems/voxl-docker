@@ -114,3 +114,11 @@ RUN apt-get -y clean
 RUN apt-get update
 RUN apt-get -y install python3
 RUN apt-get -y clean
+
+# V2.2
+# Add the qrb royale/spectre to a local apt repo so projects can install it if they wish
+# Also this release: updated apq proprietary to 0.0.3 with royale/spectre pulled from apq system image
+ADD royale*.deb /data/offline_deb_packages/
+RUN cd /data/offline_deb_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+RUN echo "deb [trusted=yes] file:/data/offline_deb_packages/ ./" > /etc/apt/sources.list.d/local.list
+RUN apt-get update
