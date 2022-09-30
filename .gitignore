@@ -7,3 +7,4 @@ adsp-proc-examples
 *.ipk
 voxl-cross/*.ipk
 voxl-cross/*.deb
+.gitconfig
