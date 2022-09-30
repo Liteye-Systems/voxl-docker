@@ -103,7 +103,6 @@ ADD apq8096-proprietary*.ipk /data/offline_ipk_packages/
 
 # add bash stuff
 ADD bash_utilities.tar /
-RUN echo "voxl-cross" > /etc/modalai/image.name
 
 # add nettools
 RUN apt-get -y install net-tools sshpass iputils-ping
@@ -122,3 +121,6 @@ ADD royale*.deb /data/offline_deb_packages/
 RUN cd /data/offline_deb_packages/ && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
 RUN echo "deb [trusted=yes] file:/data/offline_deb_packages/ ./" > /etc/apt/sources.list.d/local.list
 RUN apt-get update
+
+# Finish by adding the version to the ps1 so we can tell what's running
+RUN echo "voxl-cross(2.2)" > /etc/modalai/image.name
