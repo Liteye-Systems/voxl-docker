@@ -39,7 +39,12 @@ Note you don't need to build this yourself, you can just download it from https:
 
 To build this yourself:
 
-1) download the qualcomm-proprietary_0.0.1.ipk, apq8096-proprietary_0.0.2.ipk, and qrb5165-proprietary_0.0.2_arm64.deb packages from https://downloads.modalai.com and place the voxl-cross directory.
+1) download the following packages from https://downloads.modalai.com and place the voxl-cross directory.
+
+	- qualcomm-proprietary_0.0.1.ipk
+	- apq8096-proprietary_0.0.3.ipk
+	- qrb5165-proprietary_0.0.2_arm64.deb
+	- royale-331-spectre-4-7_1.1.0_arm64.deb
 
 2) run the install-cross-docker.sh script
 
@@ -50,7 +55,7 @@ To build this yourself:
 To compress a docker image for export after it's built:
 
 ```
-docker save voxl-cross:V1.8 | gzip > voxl-cross_V1.8.tgz
+docker save voxl-cross:V2.3 | gzip > voxl-cross_V2.3.tgz
 ```
 
 ## How to build voxl-hexagon
