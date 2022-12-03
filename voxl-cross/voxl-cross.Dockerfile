@@ -127,5 +127,7 @@ RUN apt-get update
 ADD voxl-cross-provides*.deb /data/offline_deb_packages/
 RUN dpkg -i /data/offline_deb_packages/voxl-cross-provides*
 
+# V2.4 update apq proprietary to 0.0.4 with omx headers
+
 # Finish by adding the version to the ps1 so we can tell what's running
-RUN echo "voxl-cross(2.3)" > /etc/modalai/image.name
+RUN echo "voxl-cross(2.4)" > /etc/modalai/image.name

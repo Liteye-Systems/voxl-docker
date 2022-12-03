@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="V2.3"
+VERSION="V2.4"
 RUN_SCRIPT=voxl-docker
 
 
@@ -12,16 +12,18 @@ if [ "$1" == "clean" ]; then
 	echo "starting clean build"
 fi
 
+ERROR=
+
 # Check required files exit
 if [ ! -f voxl-cross/qualcomm-proprietary_0.0.1.ipk ] ||
-   [ ! -f voxl-cross/apq8096-proprietary_0.0.3.ipk ]  ||
+   [ ! -f voxl-cross/apq8096-proprietary_0.0.4.ipk ]  ||
    [ ! -f voxl-cross/qrb5165-proprietary_0.0.2_arm64.deb ]  ||
    [ ! -f voxl-cross/royale-331-spectre-4-7_1.1.0_arm64.deb ]; then
 
 	echo ""
 	echo "Missing one or more of the following required files"
 	echo "qualcomm-proprietary_0.0.1.ipk"
-	echo "apq8096-proprietary_0.0.3.ipk"
+	echo "apq8096-proprietary_0.0.4.ipk"
 	echo "qrb5165-proprietary_0.0.2_arm64.deb"
 	echo "royale-331-spectre-4-7_1.1.0_arm64.deb"
 	echo ""
