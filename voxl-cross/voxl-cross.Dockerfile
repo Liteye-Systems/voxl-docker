@@ -129,3 +129,4 @@ RUN dpkg -i /data/offline_deb_packages/voxl-cross*
 
 # V2.4 update apq proprietary to 0.0.4 with omx headers
 
+# V2.5 update qrb proprietary to 0.0.3 with omx headers
