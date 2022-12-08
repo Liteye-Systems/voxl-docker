@@ -122,12 +122,10 @@ RUN cd /data/offline_deb_packages/ && dpkg-scanpackages . /dev/null | gzip -9c >
 RUN echo "deb [trusted=yes] file:/data/offline_deb_packages/ ./" > /etc/apt/sources.list.d/local.list
 RUN apt-get update
 
-# V2.3 add a meta package voxl-cross-provides to provide things that enable
+# V2.3 add a meta package voxl-cross to provide things that enable
 # installing build deps
-ADD voxl-cross-provides*.deb /data/offline_deb_packages/
-RUN dpkg -i /data/offline_deb_packages/voxl-cross-provides*
+ADD voxl-cross*.deb /data/offline_deb_packages/
+RUN dpkg -i /data/offline_deb_packages/voxl-cross*
 
 # V2.4 update apq proprietary to 0.0.4 with omx headers
 
-# Finish by adding the version to the ps1 so we can tell what's running
-RUN echo "voxl-cross(2.4)" > /etc/modalai/image.name

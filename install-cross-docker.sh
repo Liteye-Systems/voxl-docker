@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="V2.4"
+VERSION="2.5"
 RUN_SCRIPT=voxl-docker
 
 
@@ -12,32 +12,36 @@ if [ "$1" == "clean" ]; then
 	echo "starting clean build"
 fi
 
+# Check required files exist
+REQUIRED_FILES=(
+    "qualcomm-proprietary_0.0.1.ipk"
+    "apq8096-proprietary_0.0.4.ipk"
+    "qrb5165-proprietary_0.0.3_arm64.deb"
+    "royale-331-spectre-4-7_1.1.0_arm64.deb"
+)
 ERROR=
 
-# Check required files exit
-if [ ! -f voxl-cross/qualcomm-proprietary_0.0.1.ipk ] ||
-   [ ! -f voxl-cross/apq8096-proprietary_0.0.4.ipk ]  ||
-   [ ! -f voxl-cross/qrb5165-proprietary_0.0.2_arm64.deb ]  ||
-   [ ! -f voxl-cross/royale-331-spectre-4-7_1.1.0_arm64.deb ]; then
+for FILE in ${REQUIRED_FILES[@]} ; do
+    if [ ! -f "voxl-cross/$FILE" ] ; then
+        echo "Missing: $FILE"
+        ERROR=1
+    fi
+done
 
-	echo ""
-	echo "Missing one or more of the following required files"
-	echo "qualcomm-proprietary_0.0.1.ipk"
-	echo "apq8096-proprietary_0.0.4.ipk"
-	echo "qrb5165-proprietary_0.0.2_arm64.deb"
-	echo "royale-331-spectre-4-7_1.1.0_arm64.deb"
-	echo ""
-	echo "Please following the instruction in the README to download"
-	echo "these files from downloads.modalai.com and place in voxl-cross/"
-	exit 1
+if [ $ERROR ] ; then
+    echo
+    echo "Please following the instruction in the README to download"
+    echo "these files from downloads.modalai.com and place in voxl-cross/"
+    exit 1
 fi
 
 # build the provides meta package
 cd voxl-cross
-DIR="cross_provides_meta_pkg"
-PKG_VERSION=$(cat $DIR/DEBIAN/control | grep "Version" | cut -d' ' -f 2)
+DIR="cross_meta_pkg"
+sed -i "s/Version.*/Version: ${VERSION}/g" ${DIR}/DEBIAN/control
+echo -n "voxl-cross(${VERSION})" > ${DIR}/etc/modalai/image.name
 PKG_NAME=$(cat $DIR/DEBIAN/control | grep "Package" | cut -d' ' -f 2)
-DEB_NAME=${PKG_NAME}_${PKG_VERSION}_arm64.deb
+DEB_NAME=${PKG_NAME}_${VERSION}_arm64.deb
 dpkg-deb --build ${DIR} ${DEB_NAME}
 cd ../
 
@@ -50,8 +54,8 @@ cp ./bash_utilities/bash_utilities.tar voxl-cross/
 
 # Build Docker image
 cd voxl-cross
-docker build $CLEAN -t voxl-cross:${VERSION} -f voxl-cross.Dockerfile .
-docker tag voxl-cross:${VERSION} voxl-cross:latest
+docker build $CLEAN -t voxl-cross:V${VERSION} -f voxl-cross.Dockerfile .
+docker tag voxl-cross:V${VERSION} voxl-cross:latest
 cd ../
 
 # install the voxl-docker helper script
