@@ -36,5 +36,6 @@ RUN_SCRIPT=voxl-docker
 
 echo "installing ${RUN_SCRIPT}.sh to /usr/local/bin/${RUN_SCRIPT}"
 sudo install -m 0755 files/${RUN_SCRIPT}.sh /usr/local/bin/${RUN_SCRIPT}
+sudo sed -i -e 's/\r$//' /usr/local/bin/voxl-docker # prevents "/bin/bash^M: bad interpreter: No such file or director" error
 
 echo "DONE"

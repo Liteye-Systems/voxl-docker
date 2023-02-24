@@ -117,7 +117,7 @@ fi
 
 cmd=(
 docker run \
-	--rm -it \
+	--rm -t \
 	--net=host \
 	--privileged \
 	-w /home/$(whoami) \
@@ -127,6 +127,7 @@ docker run \
 	$PLATFORM_OPTS \
 	${IMAGE}\
 	${ENTRYPOINT})
+
 
 # print what's going to run
 echo "launching image: $IMAGE with the following command:"
